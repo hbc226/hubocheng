@@ -5,4 +5,4 @@ function greet(name) {
 
 greet("World");
 greet("hbc");
-greet("VS Code");greet("hubocheng")
+greet("VS Code");greet("hubocheng")// added greeting
