@@ -10,6 +10,9 @@ if [ ! -d ".git" ]; then
   exit 1
 fi
 
+# 获取当前分支名称
+branch=$(git rev-parse --abbrev-ref HEAD)
+
 # 显示当前改动
 echo "📂 检查改动文件..."
 git status -s
@@ -23,12 +26,17 @@ if [ -z "$commit_msg" ]; then
   commit_msg="auto update"
 fi
 
-# 执行 add、commit、push
+# 执行 add、commit
 echo "🔄 正在提交..."
 git add .
 git commit -m "$commit_msg"
 
+# 先尝试拉取远程更新，避免冲突
+echo "📥 拉取远程更新并合并..."
+git pull origin "$branch" --allow-unrelated-histories
+
+# 再推送到远程
 echo "🚀 推送到远程仓库..."
-git push origin main
+git push origin "$branch"
 
 echo "✅ 上传完成！"
