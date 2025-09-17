@@ -31,12 +31,23 @@ echo "🔄 正在提交..."
 git add .
 git commit -m "$commit_msg"
 
-# 先尝试拉取远程更新，避免冲突
-echo "📥 拉取远程更新并合并..."
-git pull origin "$branch" --allow-unrelated-histories
+# 先尝试拉取远程更新，强制用 merge 模式解决分支偏离
+echo "📥 拉取远程更新并合并 (merge 模式)..."
+git pull origin "$branch" --allow-unrelated-histories --no-rebase
+
+# 如果 pull 失败，提示用户手动处理
+if [ $? -ne 0 ]; then
+  echo "⚠️ 拉取远程失败，请检查冲突并手动解决！"
+  exit 1
+fi
 
 # 再推送到远程
 echo "🚀 推送到远程仓库..."
 git push origin "$branch"
 
-echo "✅ 上传完成！"
+# 检查推送是否成功
+if [ $? -eq 0 ]; then
+  echo "✅ 上传完成！"
+else
+  echo "❌ 推送失败，请检查错误信息！"
+fi
