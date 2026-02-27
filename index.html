@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>新年祝福</title>
+  <style>
+    :root {
+      --bg-1: #fff4d6;
+      --bg-2: #ffd59e;
+      --card: rgba(255, 255, 255, 0.85);
+      --primary: #bf1e2e;
+      --text: #2f1b0c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 20%, rgba(191, 30, 46, 0.18), transparent 35%),
+        radial-gradient(circle at 90% 80%, rgba(255, 122, 0, 0.2), transparent 30%),
+        linear-gradient(130deg, var(--bg-1), var(--bg-2));
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+    .card {
+      width: min(760px, 100%);
+      background: var(--card);
+      border: 2px solid rgba(191, 30, 46, 0.2);
+      border-radius: 20px;
+      box-shadow: 0 16px 32px rgba(90, 32, 0, 0.15);
+      padding: 28px 22px;
+      text-align: center;
+      backdrop-filter: blur(4px);
+    }
+    h1 {
+      margin: 0 0 8px;
+      color: var(--primary);
+      font-size: clamp(2rem, 4vw, 3rem);
+    }
+    .subtitle {
+      margin: 0 0 20px;
+      font-size: 1.05rem;
+      opacity: 0.85;
+    }
+    .wish {
+      margin: 14px auto;
+      width: min(640px, 100%);
+      background: rgba(255, 255, 255, 0.92);
+      border-left: 5px solid var(--primary);
+      border-radius: 10px;
+      padding: 12px 14px;
+      text-align: left;
+      line-height: 1.65;
+    }
+    button {
+      margin-top: 16px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-size: 1rem;
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    button:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>新年快乐</h1>
+    <p class="subtitle">愿你在新的一年里，平安喜乐，万事顺遂。</p>
+    <section id="wish-list"></section>
+    <button id="refresh">换一批祝福语</button>
+  </main>
+
+  <script>
+    const wishes = [
+      "愿你新的一年，所求皆如愿，所行化坦途。",
+      "愿你的生活红红火火，事业蒸蒸日上。",
+      "愿你笑口常开，烦恼少一点，幸运多一点。",
+      "愿你和家人岁岁常欢愉，年年皆胜意。",
+      "愿你新年有新起点，日子越过越精彩。",
+      "愿你的每一份努力，都在新年里开花结果。",
+      "愿你身体健康，心情明朗，每天都充满能量。",
+      "愿你被爱包围，也有力量去温暖别人。",
+      "愿你钱包鼓鼓，灵感满满，好运连连。",
+      "愿你在新的一年勇敢追梦，不负热爱。",
+      "愿你所有期待都不落空，所有美好都如期而至。",
+      "愿你前路有光，脚下有风，心中有方向。"
+    ];
+
+    const wishList = document.getElementById("wish-list");
+    const button = document.getElementById("refresh");
+
+    function pickRandomWishes(count = 6) {
+      const copy = [...wishes];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy.slice(0, count);
+    }
+
+    function renderWishes() {
+      const selected = pickRandomWishes();
+      wishList.innerHTML = selected
+        .map((w) => '<article class="wish">' + w + "</article>")
+        .join("");
+    }
+
+    button.addEventListener("click", renderWishes);
+    renderWishes();
+  </script>
+</body>
+</html>
