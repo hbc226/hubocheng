@@ -14,6 +14,9 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;ma
 .spin{padding:14px 32px;border-radius:15px;background:linear-gradient(120deg,var(--pink),#ff8e78);font-weight:900;font-size:16px;box-shadow:0 7px 18px rgba(255,111,158,.25);transition:.2s}.spin:active{transform:scale(.96)}.spin:disabled{opacity:.6;cursor:wait}.hint{color:var(--muted);font-size:12px;margin:13px 0 0}.side{display:flex;flex-direction:column;gap:14px}.block-title{font-size:13px;font-weight:800;color:#f5eafa;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.players{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.players input{min-width:0;width:100%;padding:12px 13px;background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:12px;color:var(--text);outline:none}.players input:focus{border-color:var(--pink)}.add-player{grid-column:1/-1;padding:10px;border:1px dashed rgba(255,255,255,.22);border-radius:12px;background:rgba(255,255,255,.04);color:var(--muted);font-size:12px}.add-player:hover{border-color:var(--pink);color:#ffd3e1}.turn{padding:11px 13px;border-radius:12px;background:rgba(255,111,158,.11);border:1px solid rgba(255,111,158,.2);font-size:13px}.turn b{color:#ff9fba}.modes{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.mode{padding:11px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--line);font-size:12px;text-align:left}.mode.active{border-color:var(--pink);background:rgba(255,111,158,.14)}.mode small{display:block;color:var(--muted);margin-top:4px;font-size:10px}.rules{font-size:12px;color:var(--muted);line-height:1.8;margin:0;padding-left:17px}.history{max-height:160px;overflow:auto;display:flex;flex-direction:column;gap:7px}.history-item{font-size:12px;line-height:1.4;padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.05);color:#e7dcec}.history-item span{color:var(--pink);font-weight:800;margin-right:5px}.tiny-action{padding:6px 9px;border-radius:8px;background:rgba(255,255,255,.08);font-size:11px;color:var(--muted)}
 .result-backdrop{position:fixed;inset:0;background:rgba(8,5,15,.72);backdrop-filter:blur(8px);display:grid;place-items:center;padding:18px;opacity:0;pointer-events:none;transition:.22s;z-index:10}.result-backdrop.show{opacity:1;pointer-events:auto}.result{width:min(100%,500px);background:linear-gradient(150deg,#3a2850,#211a32);border:1px solid rgba(255,255,255,.16);border-radius:26px;padding:25px;box-shadow:0 22px 65px rgba(0,0,0,.42);transform:translateY(15px) scale(.97);transition:.22s}.show .result{transform:none}.result-tag{display:inline-block;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:800;background:rgba(255,255,255,.11);color:#ffb3ca}.result h2{font-size:24px;line-height:1.35;margin:15px 0 9px}.result .detail{font-size:13px;color:var(--muted);line-height:1.7;margin:0 0 20px}.result-actions{display:flex;gap:9px}.result-actions button{flex:1;padding:12px;border-radius:12px;font-weight:800}.next{background:linear-gradient(120deg,var(--pink),#ff8e78)}.skip{background:rgba(255,255,255,.08);border:1px solid var(--line)}
 @media(max-width:740px){.app{padding:16px 13px 32px}.layout{grid-template-columns:1fr}.wheel-panel{min-height:0;padding-top:15px}.wheel-wrap{width:min(82vw,350px);margin-top:4px}.panel{border-radius:21px;padding:17px}header{margin-bottom:15px}.result h2{font-size:22px}}
+/* 8 个对象标签对应 8 个完全等宽的色块。 */
+.wheel{background:conic-gradient(#ff719e 0 45deg,#ffb36b 45deg 90deg,#a98cff 90deg 135deg,#70dbca 135deg 180deg,#f5c86a 180deg 225deg,#ff8db6 225deg 270deg,#70c9e8 270deg 315deg,#b18cf5 315deg 360deg)}
+.wheel:after{background:repeating-conic-gradient(transparent 0 43.5deg,rgba(255,255,255,.28) 43.5deg 45deg)}
 </style>
 </head>
 <body>
@@ -52,7 +55,25 @@ tasks.drink=[
   ['表情喝法','做出一个表情，大家投票猜它代表哪种酒；票数最少的人喝一小口或做鬼脸。'],
   ['安全回合','本轮所有人只碰杯不饮酒；想继续游戏的人，可以用喝水代替。'],
   ['反转酒权','指定一位玩家和你猜拳，输家喝一小口，赢家决定下一轮谁先转盘。'],
-  ['最后一口不是惩罚','说出今天最开心的一件事，全员为此碰杯；不想喝酒就举水杯完成仪式。']
+  ['最后一口不是惩罚','说出今天最开心的一件事，全员为此碰杯；不想喝酒就举水杯完成仪式。'],
+  ['禁词酒令','全员约定一个禁词，接下来 60 秒说出它的人喝一小口；也可以改成喝水。'],
+  ['左手挑战','下一轮所有人只能用左手举杯；忘记的人喝水并做一个夸张敬酒动作。'],
+  ['三秒决定','主持人喊“自己 / 左边 / 右边”，三秒内选好喝法；犹豫的人只需碰杯不饮。'],
+  ['举杯投票','大家举杯投票选出“今晚最会活跃气氛的人”，票数最多的人指定一位小口喝酒。'],
+  ['数字接龙','从 1 开始轮流报数，遇到 3 或 7 的倍数要说“干杯”；说错的人喝一小口。'],
+  ['歌曲酒令','播放一首歌，副歌开始时全员碰杯；抢先或慢半拍的人喝水。'],
+  ['表情包敬酒','用表情包或表情表达“我敬你”，对方猜中就一起小口喝，猜错则安全。'],
+  ['随机座位','每个人指向一个玩家说“敬你”，被指到的人选择和谁一起碰杯。'],
+  ['下酒菜竞猜','说出一种下酒菜，其他人不能重复；重复的人喝水并说一个新菜名。'],
+  ['杯口谜语','出一个简单谜语，猜错的人喝水，猜对的人获得一次转移小口的权利。'],
+  ['颜色碰杯','每个人选择一种颜色，主持人喊到该颜色时对应玩家举杯；慢的人只喝水。'],
+  ['夸夸碰杯','对左边玩家说一句具体夸奖后碰杯；说不出的人可以喝水或接受一个搞笑称号。'],
+  ['反向数酒','从 10 倒数到 1，数字顺序说错的人和指定玩家一起碰杯，各自最多一小口。'],
+  ['杯子节奏','一人敲桌两下、碰杯一下，其他人照做；节奏错的人喝水。'],
+  ['幸运空杯','随机指定一位玩家，本轮只负责给大家倒水或发纸巾，自己获得免饮权。'],
+  ['谁最像','提问“谁最像会先醉倒 / 最会劝酒 / 最能活跃气氛”，被指最多的人决定喝水还是讲故事。'],
+  ['轮流敬酒','每人用一句话向下一位玩家敬酒，不能重复“身体健康”；重复的人安全通过。'],
+  ['暂停按钮','任何玩家都可以喊“暂停”，全员放下酒杯做一次深呼吸和喝水，再继续游戏。']
 ];
 tasks.intimate=[
   ['暧昧眼神','面对面看着对方 30 秒，不说话。先移开视线的人，要说一句真诚的暧昧夸奖。'],
@@ -92,7 +113,49 @@ tasks.intimate=[
   ['暧昧昵称挑战','用一个新昵称叫对方三次，昵称可以甜、坏或搞笑，但必须让对方觉得舒服。'],
   ['表情诱惑','不用说话，用三个表情演示你希望对方怎么靠近；对方猜错就交换。'],
   ['手机小纸条','在对方面前发一条不露骨但暧昧的消息，例如“今晚你有点危险”；对方可以回一个更大胆的。'],
-  ['温柔反击','对方说一句挑逗话后，你必须用更大胆但尊重的方式回应；不想升级就说“换一个”。']
+  ['温柔反击','对方说一句挑逗话后，你必须用更大胆但尊重的方式回应；不想升级就说“换一个”。'],
+  ['手心写字','在对方手心写一个字或画一个符号，让 TA 猜你的意思；不舒服可改成写在纸上。'],
+  ['三秒心动','轮流说出对方让你心动的三个瞬间，每个答案不能重复。'],
+  ['角色切换','一人演“高冷陌生人”，另一人用 20 秒搭讪；然后交换角色。'],
+  ['声音挑战','闭上眼听对方说一句话，猜 TA 是在撒娇、命令还是调侃；猜错就交换。'],
+  ['亲密默契','同时在 1—5 之间比出今晚想要的亲密程度，数字差距超过 2 就重新沟通边界。'],
+  ['轻碰接龙','一人选择手背、肩膀或头发，轻轻触碰 5 秒后交换；可随时改成击掌。'],
+  ['暧昧夸奖接龙','每人说一句比上一句更具体的夸奖，不能只说“好看”或“性感”。'],
+  ['贴纸称号','给对方设计一个今晚的成人向但不露骨的称号，并解释为什么。'],
+  ['呼吸同步','两人面对面慢慢呼吸 30 秒，结束后各说一个此刻的感受。'],
+  ['眼神三问','只能用眼神回答三个问题：想靠近吗、想牵手吗、想继续吗；任何答案都可以是跳过。'],
+  ['靠肩挑战','一人靠在另一人肩上 60 秒，期间对方说一句温柔的话；双方可换成并排坐。'],
+  ['暧昧选择题','选一项：被叫昵称、听耳语、被夸奖、牵手 30 秒；由接受者决定。'],
+  ['坏笑挑战','对着对方做一个最会撩人的坏笑，保持 5 秒；先笑场的人说一句真心话。'],
+  ['默契指令','一人只能说“靠近、保持、停下”三个词，另一人跟随 30 秒；不能有其他触碰要求。'],
+  ['未来约会','设计一个带有一点暧昧感的约会计划，只讲前三步，不要求今晚执行。'],
+  ['情绪交换','各自说出一个想被对方安慰的方式和一个想被对方调侃的方式。'],
+  ['一问一答','轮流问一个成人向但不露骨的问题，对方可以回答、改题或跳过。'],
+  ['镜像动作','面对面模仿对方的坐姿、表情和小动作 20 秒，不能触碰对方。'],
+  ['心动排名','从眼神、声音、笑容、手、气质中选出对方最有吸引力的一项并说明理由。'],
+  ['亲密收尾','本轮结束时，两人选择一个收尾动作：碰拳、拥抱、贴额头或一起喝水。'],
+  ['秘密指令','用不超过三个字给对方一个暧昧指令，例如“看着我”“靠近点”；对方可以执行、改写或跳过。'],
+  ['盲选亲吻','闭上眼，从手背、额头、脸颊中选一个亲吻位置；先问“可以吗”，双方同意才执行。'],
+  ['撩人台词','用一句台词向对方搭讪，必须包含对方的名字或称号；对方给这句台词打 1—5 分。'],
+  ['暧昧主持人','一人当 30 秒“主持人”，用温柔又调皮的语气介绍对方，不能触碰。'],
+  ['距离升级','从并排坐、肩膀相碰、面对面靠近中选择一个距离，保持 30 秒后由接受者决定是否升级。'],
+  ['耳语二选一','对方选择听一句甜的耳语或一句坏坏的耳语；不喜欢可以换成普通夸奖。'],
+  ['诱惑排序','把“眼神、声音、笑容、靠近、拥抱”按最让你心动的顺序排列，并解释第一名。'],
+  ['角色扮演：约会迟到','一人扮演迟到的约会对象，另一人用 20 秒调侃 TA；然后交换。'],
+  ['只许回答','对方问一个暧昧问题，你只能回答“可以”“不可以”或“换一个”，不能解释。'],
+  ['心跳测试','一人把手放在自己胸口，另一人说一句让 TA 心跳加快的话；不舒服可改为搞笑台词。'],
+  ['亲密菜单','为对方设计三道“今晚菜单”：一道夸奖、一道拥抱、一道聊天；由对方任选一道。'],
+  ['坏坏称号','给对方取一个带点调侃的称号，例如“危险分子”“撩人高手”，并当面叫一次。'],
+  ['近距离问答','两人保持舒服的近距离，轮流回答：“现在最想让对方做什么温柔的事？”可回答“没想好”。'],
+  ['掌心温度','两人掌心相贴 20 秒，期间不能说话；结束后各自说一个感受。'],
+  ['一次主动权','本轮一人拥有一次主动权，可提出一个亲密动作；另一人可以接受、改成更轻或跳过。'],
+  ['暧昧模仿秀','模仿对方最会撩人的语气说一句话，然后让对方给出“像不像”的评分。'],
+  ['反向告白','用“我才不会……”开头说一句其实很想对方做的温柔动作；对方可以猜真假。'],
+  ['眼神停留','先看眼睛，再看笑容，最后看对方最喜欢被夸的地方；每处停留 5 秒。'],
+  ['靠近后退','一人说“近一点 / 退一点 / 停”，另一人只按指令移动；双方都可随时结束。'],
+  ['成人版真心话','说出一个你觉得很性感但不露骨的瞬间，或选择听对方讲一个。'],
+  ['心动交换券','每个人获得一张“心动交换券”，可以兑换一个拥抱、耳语、牵手或跳过一次题目。'],
+  ['最后一眼','本轮结束前，两人对视 10 秒，然后各自说一句“我今晚记住你的一点”。']
 ];
 mode='drink';
 </script>
@@ -165,6 +228,19 @@ function addPlayerInput(){
   updateDynamicTurn();
 }
 function advanceDynamicTurn(){backdrop.classList.remove('show');current=(current+1)%allPlayerNames().length;updateDynamicTurn();}
+let deckMode='';
+let taskDeck=[];
+function drawTask(){
+  if(deckMode!==mode || taskDeck.length===0){
+    deckMode=mode;
+    taskDeck=[...tasks[mode]];
+    for(let i=taskDeck.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [taskDeck[i],taskDeck[j]]=[taskDeck[j],taskDeck[i]];
+    }
+  }
+  return taskDeck.pop();
+}
 renderDynamicWheel();
 updateDynamicTurn();
 $('addPlayerBtn').onclick=addPlayerInput;
@@ -181,7 +257,7 @@ $('spinBtn').onclick=()=>{
   rotation+=1440+(337.5-targetIndex*45)+Math.floor(Math.random()*20);
   wheel.style.transform='rotate('+rotation+'deg)';
   setTimeout(()=>{
-    const [tag,text]=chooseTask();
+    const [tag,text]=drawTask();
     const playerList=allPlayerNames();
     const actor=playerList[current%playerList.length];
     const namedText=mode==='intimate'
