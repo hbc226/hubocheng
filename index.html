@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#171322" />
+<title>心动转盘 · 双人聚会小游戏</title>
+<style>
+:root{--bg:#171322;--card:#241d35;--text:#fff8ff;--muted:#bcaec9;--pink:#ff6f9e;--lav:#a98cff;--line:rgba(255,255,255,.1)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 10% 0%,#3a2050 0,#171322 44%),var(--bg);color:var(--text);font-family:ui-rounded,"PingFang SC","Microsoft YaHei",system-ui,sans-serif}button,input{font:inherit}button{cursor:pointer;border:0;color:inherit}.app{width:min(100%,980px);margin:auto;padding:24px 18px 46px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,var(--pink),var(--lav));font-size:24px;box-shadow:0 8px 24px rgba(255,111,158,.25)}h1{font-size:21px;margin:0;letter-spacing:.5px}header p{margin:3px 0 0;color:var(--muted);font-size:12px}.pill{padding:9px 13px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.06);font-size:12px;color:#eee2f4}
+.layout{display:grid;grid-template-columns:1.02fr .98fr;gap:18px}.panel{background:linear-gradient(165deg,rgba(54,43,78,.85),rgba(29,24,44,.94));border:1px solid var(--line);border-radius:25px;padding:20px;box-shadow:0 18px 50px rgba(0,0,0,.2)}
+.wheel-panel{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:580px}.wheel-wrap{position:relative;width:min(78vw,390px);aspect-ratio:1;margin:12px auto 24px}.wheel{width:100%;height:100%;border-radius:50%;background:conic-gradient(#ff719e 0 72deg,#ffb36b 72deg 144deg,#a98cff 144deg 216deg,#70dbca 216deg 288deg,#f5c86a 288deg 360deg);border:12px solid rgba(255,255,255,.92);box-shadow:0 8px 0 rgba(0,0,0,.18),0 20px 42px rgba(0,0,0,.28);transition:transform 4s cubic-bezier(.12,.76,.12,1);position:relative;overflow:hidden}.wheel:after{content:"";position:absolute;inset:0;background:repeating-conic-gradient(transparent 0 70deg,rgba(255,255,255,.25) 70deg 72deg)}.wheel-labels{position:absolute;inset:0;pointer-events:none;transform:rotate(36deg)}.wheel-label{position:absolute;left:50%;top:50%;width:100%;height:50%;transform-origin:50% 100%;display:flex;justify-content:center;align-items:flex-start;padding-top:18px;font-size:14px;font-weight:800;text-shadow:0 2px 4px rgba(0,0,0,.25)}.wheel-label:nth-child(1){transform:translate(-50%,-100%) rotate(0deg)}.wheel-label:nth-child(2){transform:translate(-50%,-100%) rotate(72deg)}.wheel-label:nth-child(3){transform:translate(-50%,-100%) rotate(144deg)}.wheel-label:nth-child(4){transform:translate(-50%,-100%) rotate(216deg)}.wheel-label:nth-child(5){transform:translate(-50%,-100%) rotate(288deg)}.hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:74px;height:74px;border-radius:50%;background:var(--card);border:8px solid #fff;display:grid;place-items:center;font-size:28px;z-index:3;box-shadow:0 4px 14px rgba(0,0,0,.25)}.pointer{position:absolute;z-index:4;top:-8px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:34px solid #fff;filter:drop-shadow(0 3px 2px rgba(0,0,0,.35))}
+.spin{padding:14px 32px;border-radius:15px;background:linear-gradient(120deg,var(--pink),#ff8e78);font-weight:900;font-size:16px;box-shadow:0 7px 18px rgba(255,111,158,.25);transition:.2s}.spin:active{transform:scale(.96)}.spin:disabled{opacity:.6;cursor:wait}.hint{color:var(--muted);font-size:12px;margin:13px 0 0}.side{display:flex;flex-direction:column;gap:14px}.block-title{font-size:13px;font-weight:800;color:#f5eafa;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.players{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.players input{min-width:0;width:100%;padding:12px 13px;background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:12px;color:var(--text);outline:none}.players input:focus{border-color:var(--pink)}.add-player{grid-column:1/-1;padding:10px;border:1px dashed rgba(255,255,255,.22);border-radius:12px;background:rgba(255,255,255,.04);color:var(--muted);font-size:12px}.add-player:hover{border-color:var(--pink);color:#ffd3e1}.turn{padding:11px 13px;border-radius:12px;background:rgba(255,111,158,.11);border:1px solid rgba(255,111,158,.2);font-size:13px}.turn b{color:#ff9fba}.modes{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.mode{padding:11px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--line);font-size:12px;text-align:left}.mode.active{border-color:var(--pink);background:rgba(255,111,158,.14)}.mode small{display:block;color:var(--muted);margin-top:4px;font-size:10px}.rules{font-size:12px;color:var(--muted);line-height:1.8;margin:0;padding-left:17px}.history{max-height:160px;overflow:auto;display:flex;flex-direction:column;gap:7px}.history-item{font-size:12px;line-height:1.4;padding:9px 10px;border-radius:10px;background:rgba(255,255,255,.05);color:#e7dcec}.history-item span{color:var(--pink);font-weight:800;margin-right:5px}.tiny-action{padding:6px 9px;border-radius:8px;background:rgba(255,255,255,.08);font-size:11px;color:var(--muted)}
+.result-backdrop{position:fixed;inset:0;background:rgba(8,5,15,.72);backdrop-filter:blur(8px);display:grid;place-items:center;padding:18px;opacity:0;pointer-events:none;transition:.22s;z-index:10}.result-backdrop.show{opacity:1;pointer-events:auto}.result{width:min(100%,500px);background:linear-gradient(150deg,#3a2850,#211a32);border:1px solid rgba(255,255,255,.16);border-radius:26px;padding:25px;box-shadow:0 22px 65px rgba(0,0,0,.42);transform:translateY(15px) scale(.97);transition:.22s}.show .result{transform:none}.result-tag{display:inline-block;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:800;background:rgba(255,255,255,.11);color:#ffb3ca}.result h2{font-size:24px;line-height:1.35;margin:15px 0 9px}.result .detail{font-size:13px;color:var(--muted);line-height:1.7;margin:0 0 20px}.result-actions{display:flex;gap:9px}.result-actions button{flex:1;padding:12px;border-radius:12px;font-weight:800}.next{background:linear-gradient(120deg,var(--pink),#ff8e78)}.skip{background:rgba(255,255,255,.08);border:1px solid var(--line)}
+@media(max-width:740px){.app{padding:16px 13px 32px}.layout{grid-template-columns:1fr}.wheel-panel{min-height:0;padding-top:15px}.wheel-wrap{width:min(82vw,350px);margin-top:4px}.panel{border-radius:21px;padding:17px}header{margin-bottom:15px}.result h2{font-size:22px}}
+</style>
+</head>
+<body>
+<main class="app">
+<header><div class="brand"><div class="logo">♡</div><div><h1>心动转盘</h1><p>两个人的默契、勇气和小秘密</p></div></div><div class="pill">免费 · 手机打开即玩</div></header>
+<section class="layout">
+<div class="panel wheel-panel">
+<div class="wheel-wrap"><div class="pointer"></div><div id="wheel" class="wheel"><div id="wheelLabels" class="wheel-labels"></div><div class="hub">♡</div></div></div>
+<button id="spinBtn" class="spin">开始转盘</button><p class="hint">当前玩家：<b id="currentPlayer">玩家 A</b> · 转到后一起完成</p>
+</div>
+<aside class="side">
+<div class="panel"><div class="block-title">玩家名字 / 称号 <button id="swapBtn" class="tiny-action">交换顺序</button></div><div id="players" class="players"><input class="player-input" id="p1" value="玩家 A" maxlength="12" placeholder="名字或称号"><input class="player-input" id="p2" value="玩家 B" maxlength="12" placeholder="名字或称号"><button id="addPlayerBtn" class="add-player">＋ 添加玩家</button></div><div class="turn" style="margin-top:10px">轮到 <b id="turnName">玩家 A</b> 转盘</div></div>
+<div class="panel"><div class="block-title">选择游戏模式</div><div class="modes"><button class="mode active" data-mode="drink">🍻 微醺喝酒<small>转到什么就喝什么，适合聚会</small></button><button class="mode" data-mode="intimate">🔥 亲密互动 · 18+<small>暧昧升级，双方同意才进行</small></button></div></div>
+<div class="panel"><div class="block-title">小提示</div><ul class="rules"><li>亲密模式仅限成年且彼此自愿的玩家</li><li>任何一方不舒服，都可以直接跳过或换成拥抱/喝水</li><li>不强迫饮酒，不酒后驾车，开心比输赢重要</li></ul></div>
+<div class="panel"><div class="block-title">本局记录 <button id="clearBtn" class="tiny-action">清空</button></div><div id="history" class="history"><div class="history-item" style="color:var(--muted)">转动一次，记录会显示在这里</div></div></div>
+</aside>
+</section>
+</main>
+<div id="backdrop" class="result-backdrop"><div class="result"><div id="resultTag" class="result-tag">默契挑战</div><h2 id="resultTitle">准备好了吗？</h2><p id="resultDetail" class="detail"></p><div class="result-actions"><button id="skipBtn" class="skip">跳过这题</button><button id="nextBtn" class="next">完成，下一题</button></div></div></div>
+<script>
+const tasks={all:[['默契挑战','同时伸手比 1、2 或 3，三局两胜。输的人选择：喝一小口 / 喝水 / 做一个可爱的表情。'],['默契挑战','不说话，用手势让对方猜一个你们共同经历过的地点。限时 30 秒。'],['真心话','说出你第一次见到对方时，心里最真实的一个想法。'],['真心话','对方身上哪个小习惯让你觉得很可爱？现在告诉 TA。'],['双人挑战','面对面保持对视 20 秒，先笑的人接受一个轻松小惩罚。'],['双人挑战','一人用表情演电影或歌曲，另一人来猜；猜错就交换。'],['回忆时刻','轮流说出你们最想重来一次的一个瞬间，并说为什么。'],['回忆时刻','各自说一个“对方可能不知道，但我一直记得”的细节。'],['幸运事件','本轮安全！给对方一个拥抱、击掌或碰杯。'],['幸运事件','对方可以问你一个问题，但你也可以选择用一个动作回答。']],couple:[['默契挑战','背对背写下你们最想一起去的地方，转身同时亮答案。'],['默契挑战','同时指出“更爱拍照的人”“更容易迟到的人”，看答案是否一致。'],['真心话','最近一次因为对方而感到开心，是什么时候？'],['真心话','如果今天要给对方写一句话，你最想写什么？'],['双人挑战','手牵手完成一次石头剪刀布，输的人给赢家一个真诚的夸奖。'],['双人挑战','互相模仿对方说话 15 秒，看看谁更像。'],['回忆时刻','分享一件你希望未来和对方一起完成的小事。'],['回忆时刻','翻出手机里一张和对方有关的照片，讲讲当时的故事。'],['幸运事件','交换一个拥抱，时长由对方决定。'],['幸运事件','本轮由对方决定下一首歌或下一个游戏。']],party:[['默契挑战','一起喊“3、2、1”后比出一个数字，数字相同就全员鼓掌。'],['默契挑战','一个人说形容词，另一个人快速说出第一个想到的东西。'],['真心话','说一个你最近做过的、自己都觉得有点好笑的事情。'],['真心话','让对方用三个词形容你，你只能点头或摇头。'],['双人挑战','合作摆一个“最夸张的胜利姿势”，保持 10 秒。'],['双人挑战','轮流接龙唱歌，谁卡住就换成喝水或讲一个冷笑话。'],['回忆时刻','说出第一次一起玩时，印象最深的一个画面。'],['回忆时刻','互相分享一个小时候的梦想。'],['幸运事件','指定对方给你一个称号，并解释理由。'],['幸运事件','你可以免除下一位玩家的一次挑战。']],safe:[]};tasks.safe=tasks.all.map(([tag,text])=>[tag,text.replaceAll('喝一小口 / ','喝水 / ')]);
+let mode='all',current=0,rotation=0,spinning=false;const $=id=>document.getElementById(id),wheel=$('wheel'),backdrop=$('backdrop');const names=()=>[$('p1').value.trim()||'玩家 A',$('p2').value.trim()||'玩家 B'];function updateTurn(){const n=names()[current%2];$('turnName').textContent=n;$('currentPlayer').textContent=n}function chooseTask(){const list=tasks[mode];return list[Math.floor(Math.random()*list.length)]}function addHistory(tag,text,player){const el=document.createElement('div');el.className='history-item';el.innerHTML='<span>'+player+' · '+tag+'</span>'+text;$('history').prepend(el);while($('history').children.length>8)$('history').lastElementChild.remove()}
+$('spinBtn').onclick=()=>{if(spinning)return;spinning=true;$('spinBtn').disabled=true;rotation+=1440+Math.floor(Math.random()*360);wheel.style.transform='rotate('+rotation+'deg)';setTimeout(()=>{const [tag,text]=chooseTask();$('resultTag').textContent=tag;$('resultTitle').textContent=names()[current%2]+' 的任务';$('resultDetail').textContent=text;backdrop.classList.add('show');addHistory(tag,text,names()[current%2]);spinning=false;$('spinBtn').disabled=false},4000)};function closeResult(){backdrop.classList.remove('show');current=(current+1)%2;updateTurn()}$('nextBtn').onclick=closeResult;$('skipBtn').onclick=closeResult;$('swapBtn').onclick=()=>{const a=$('p1').value;$('p1').value=$('p2').value;$('p2').value=a;updateTurn()};$('clearBtn').onclick=()=>$('history').innerHTML='<div class="history-item" style="color:var(--muted)">转动一次，记录会显示在这里</div>';document.querySelectorAll('.mode').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.mode').forEach(b=>b.classList.remove('active'));btn.classList.add('active');mode=btn.dataset.mode});[$('p1'),$('p2')].forEach(i=>i.addEventListener('input',updateTurn));updateTurn();
+</script>
+<script>
+// 两种专属牌组：微醺喝酒与成年情侣亲密互动。所有亲密题都以双方同意为前提。
+tasks.drink=[
+  ['碰杯口令','两人同时说出一个口令再碰杯，例如“干杯”“心动”“今晚不醉”。说慢的人喝一小口；也可换水。'],
+  ['猜拳喝法','剪刀石头布三局两胜：赢家指定“自己喝 / 对方喝 / 一起喝”，每次最多一小口。'],
+  ['数字酒杯','轮流报 1 到 5 的数字，数字相同就一起喝一小口；不同则安全通过。'],
+  ['颜色挑战','选桌上一种颜色，接下来 30 秒内第一个碰到该颜色的人喝一小口。没有就改为喝水。'],
+  ['左右传酒','指定左边或右边的人，大家一起把酒杯向那边举；最后举杯的人喝一小口。'],
+  ['真心换酒','回答一个轻松问题，例如“最喜欢的下酒菜是什么？”不回答就喝一小口，回答后全员碰杯。'],
+  ['酒杯接龙','第一个人说“我喝一口因为……”，下一个人必须换一个理由；重复或卡住的人喝水。'],
+  ['指令酒权','抽到的人拥有一次“请某人喝一小口”的权利，也可以把权利留到下一轮。'],
+  ['表情喝法','做出一个表情，大家投票猜它代表哪种酒；票数最少的人喝一小口或做鬼脸。'],
+  ['安全回合','本轮所有人只碰杯不饮酒；想继续游戏的人，可以用喝水代替。'],
+  ['反转酒权','指定一位玩家和你猜拳，输家喝一小口，赢家决定下一轮谁先转盘。'],
+  ['最后一口不是惩罚','说出今天最开心的一件事，全员为此碰杯；不想喝酒就举水杯完成仪式。']
+];
+tasks.intimate=[
+  ['暧昧眼神','面对面看着对方 30 秒，不说话。先移开视线的人，要说一句真诚的暧昧夸奖。'],
+  ['耳边秘密','靠近对方耳边，说一句你希望 TA 今晚记住的话；不舒服可以改成写在手机上。'],
+  ['亲密选择','对方从“牵手 20 秒 / 拥抱 20 秒 / 额头轻吻”中选一个，双方都同意才执行。'],
+  ['心动问题','说说对方什么时刻最有吸引力。回答后，由对方决定牵手、击掌或跳过。'],
+  ['轻柔触碰','一方闭眼，另一方轻轻触碰手背或肩膀 10 秒，然后交换；任何一方都可以改成握手。'],
+  ['慢慢靠近','两人慢慢靠近，停在彼此都舒服的距离；先停下的人说一个想被如何温柔对待的方式。'],
+  ['专属称呼','给对方取一个只在今晚使用的暧昧昵称，并用它叫 TA 三次。'],
+  ['亲密回忆','分享一次你们之间最心动的瞬间；对方只能用拥抱、点头或一句话回应。'],
+  ['心动升级','从“牵手 / 贴额头 / 亲吻脸颊”中选一个升级动作，先问对方“可以吗？”，得到肯定再开始。'],
+  ['交换愿望','各自说一个想和对方尝试的约会或亲密互动，只分享，不要求当场完成。'],
+  ['大胆选择','对方闭上眼，你可以选择亲吻 TA 的手背、额头或脸颊；先询问“这样可以吗？”，也可以改为握手。'],
+  ['靠近一点','两人坐得比平时更近，保持 30 秒。期间轮流说一句你觉得对方很有吸引力的地方。'],
+  ['耳语指令','贴近对方耳边，用轻声说一句温柔又暧昧的指令，例如“看着我”或“再靠近一点”；对方可以接受、改写或跳过。'],
+  ['摘下防备','互相帮对方摘下一件外套、帽子或一件配饰，然后说一句“我喜欢你放松的样子”。双方不舒服可直接停止。'],
+  ['一分钟拥抱','保持一个舒服的拥抱 60 秒，不说话，只感受对方的呼吸；任何时候都可以松开。'],
+  ['心动惩罚','输的人选择：被对方抱 20 秒、被亲吻脸颊一次、或听一句暧昧夸奖；选择权始终在输的人。'],
+  ['大胆告白','用一句不超过 15 个字的话，告诉对方你今晚最想从 TA 那里得到什么（例如拥抱、陪伴或一个吻）。'],
+  ['舒适等级','各自给今晚的亲密互动设定 1—5 级，只能在双方共同选择的最高等级内继续。'],
+  ['反客为主','这一轮由你设计一个温柔的亲密动作，只需先说清楚动作并等待对方明确同意。'],
+  ['成人快问快答','直接回答：你更喜欢主动一点，还是被对方带着走？不想回答可以换成一个拥抱。'],
+  ['私密幻想','分享一个你觉得性感、但不需要今晚执行的想法；对方只能说“想听更多 / 换个话题 / 跳过”。'],
+  ['亲密三选一','选择一个：贴身拥抱 60 秒、坐到对方身边靠着 60 秒、或亲吻脸颊一次；双方都说可以才开始。'],
+  ['外层挑战','由对方选择你暂时摘下一件外套、帽子或配饰；只做外层物品，任何一方不舒服就换题。'],
+  ['身体偏好','说出一个你喜欢被触碰的非私密部位，例如手、肩、头发或背部，并说明你喜欢轻柔还是有力。'],
+  ['主动邀约','用最直白但尊重的方式邀请对方进行一个亲密动作，例如“我可以亲你一下吗？”对方可回答可以、换一个或跳过。'],
+  ['暧昧按摩','隔着衣物为对方做 60 秒肩颈或手部按摩，力度由接受者随时调整。'],
+  ['只用嘴说','不触碰，用 20 秒描述你觉得对方最性感的一个瞬间；对方只需听，不必回应。'],
+  ['边界交换','各自说一件今晚愿意尝试的事和一件绝对不想尝试的事，记住并尊重对方的答案。'],
+  ['暧昧倒计时','两人慢慢靠近，倒数 10 秒，在彼此舒服的距离停下；先停的人要说一句挑逗式夸奖。'],
+  ['只用眼神','面对面 30 秒，只能用眼神和表情表达“我想靠近你”；任何一方都可以换成击掌。'],
+  ['坏坏二选一','对方选择：耳边说一句暧昧话，或亲吻手背/脸颊一次；选择前必须得到明确同意。'],
+  ['陌生人角色扮演','假装今晚第一次见面，用 30 秒互相搭讪；可以夸张、搞笑，但不能让对方不舒服。'],
+  ['诱惑问答','回答：“如果今晚只能选一个亲密动作，你会选什么？”可以选择牵手、拥抱、亲吻或只聊天。'],
+  ['距离掌控','一人负责说“近一点 / 保持 / 远一点”，另一人跟随 20 秒；两人都可以随时喊停。'],
+  ['暧昧昵称挑战','用一个新昵称叫对方三次，昵称可以甜、坏或搞笑，但必须让对方觉得舒服。'],
+  ['表情诱惑','不用说话，用三个表情演示你希望对方怎么靠近；对方猜错就交换。'],
+  ['手机小纸条','在对方面前发一条不露骨但暧昧的消息，例如“今晚你有点危险”；对方可以回一个更大胆的。'],
+  ['温柔反击','对方说一句挑逗话后，你必须用更大胆但尊重的方式回应；不想升级就说“换一个”。']
+];
+mode='drink';
+</script>
+<script>
+// 对象转盘：格子显示名字/称号，停到谁就由谁接受本轮任务。
+let selectedTarget='';
+function renderWheelTargets(){
+  const [a,b]=names();
+  const labels=[a,b,'两人一起',a,b];
+  $('wheelLabels').innerHTML=labels.map(label=>'<div class="wheel-label">'+label+'</div>').join('');
+}
+function targetFromIndex(index){
+  const [a,b]=names();
+  return index===2?'两人一起':(index%2===0?a:b);
+}
+renderWheelTargets();
+[$('p1'),$('p2')].forEach(input=>input.addEventListener('input',renderWheelTargets));
+$('spinBtn').onclick=()=>{
+  if(spinning)return;
+  spinning=true;
+  $('spinBtn').disabled=true;
+  const targetIndex=Math.floor(Math.random()*5);
+  selectedTarget=targetFromIndex(targetIndex);
+  // 每格中心相差 72°，把抽中的名字转到顶部指针附近。
+  rotation+=1440+(324-targetIndex*72)+Math.floor(Math.random()*25);
+  wheel.style.transform='rotate('+rotation+'deg)';
+  setTimeout(()=>{
+    const [tag,text]=chooseTask();
+    $('resultTag').textContent=tag;
+    $('resultTitle').textContent=selectedTarget==='两人一起'?'两人一起接受惩罚':selectedTarget+' 接受惩罚';
+    $('resultDetail').textContent=text;
+    backdrop.classList.add('show');
+    addHistory(tag,text,selectedTarget);
+    spinning=false;
+    $('spinBtn').disabled=false;
+  },4000);
+};
+</script>
+<script>
+// 多人对象转盘：最多 8 人，名字也可以填写称号。
+function playerInputs(){return [...document.querySelectorAll('.player-input')];}
+function allPlayerNames(){return playerInputs().map((input,i)=>input.value.trim()||('玩家 '+String.fromCharCode(65+i)));}
+function updateDynamicTurn(){
+  const list=allPlayerNames();
+  const who=list[current%list.length];
+  $('turnName').textContent=who;
+  $('currentPlayer').textContent=who;
+}
+function renderDynamicWheel(){
+  const list=allPlayerNames();
+  const targets=[];
+  for(let i=0;i<7;i++) targets.push(list[i%list.length]);
+  targets.push('全员');
+  const labels=$('wheelLabels');
+  labels.style.transform='rotate(22.5deg)';
+  labels.innerHTML=targets.map((label,i)=>'<div class="wheel-label" style="transform:translate(-50%,-100%) rotate('+(i*45)+'deg)">'+label+'</div>').join('');
+  window.currentWheelTargets=targets;
+}
+function addPlayerInput(){
+  const count=playerInputs().length;
+  if(count>=8){$('addPlayerBtn').textContent='已达到 8 人上限';return;}
+  const input=document.createElement('input');
+  input.className='player-input';
+  input.maxLength=12;
+  input.placeholder='名字或称号';
+  input.value='玩家 '+String.fromCharCode(65+count);
+  $('players').insertBefore(input,$('addPlayerBtn'));
+  input.addEventListener('input',()=>{renderDynamicWheel();updateDynamicTurn();});
+  renderDynamicWheel();
+  updateDynamicTurn();
+}
+function advanceDynamicTurn(){backdrop.classList.remove('show');current=(current+1)%allPlayerNames().length;updateDynamicTurn();}
+renderDynamicWheel();
+updateDynamicTurn();
+$('addPlayerBtn').onclick=addPlayerInput;
+$('p1').addEventListener('input',()=>{renderDynamicWheel();updateDynamicTurn();});
+$('p2').addEventListener('input',()=>{renderDynamicWheel();updateDynamicTurn();});
+$('swapBtn').onclick=()=>{const inputs=playerInputs();if(inputs.length>1){const value=inputs[0].value;inputs[0].value=inputs[1].value;inputs[1].value=value;}renderDynamicWheel();updateDynamicTurn();};
+$('nextBtn').onclick=advanceDynamicTurn;
+$('skipBtn').onclick=advanceDynamicTurn;
+$('spinBtn').onclick=()=>{
+  if(spinning)return;
+  spinning=true;$('spinBtn').disabled=true;
+  const targetIndex=Math.floor(Math.random()*window.currentWheelTargets.length);
+  selectedTarget=window.currentWheelTargets[targetIndex];
+  rotation+=1440+(337.5-targetIndex*45)+Math.floor(Math.random()*20);
+  wheel.style.transform='rotate('+rotation+'deg)';
+  setTimeout(()=>{
+    const [tag,text]=chooseTask();
+    const playerList=allPlayerNames();
+    const actor=playerList[current%playerList.length];
+    const namedText=mode==='intimate'
+      ? text.replaceAll('对方',selectedTarget).replaceAll('TA',selectedTarget)
+      : text;
+    const interactionText=mode==='intimate' && selectedTarget!=='全员'
+      ? actor+' 与 '+selectedTarget+'：'+namedText
+      : namedText;
+    $('resultTag').textContent=tag;
+    $('resultTitle').textContent=selectedTarget==='全员'?'全员接受惩罚':selectedTarget+' 接受惩罚';
+    $('resultDetail').textContent=interactionText;
+    backdrop.classList.add('show');
+    addHistory(tag,interactionText,selectedTarget);
+    spinning=false;$('spinBtn').disabled=false;
+  },4000);
+};
+</script>
+</body>
+</html>
